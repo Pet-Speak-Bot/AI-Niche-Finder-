@@ -40,7 +40,8 @@ for e in META['SFX']:
     i=int(e['t']*SR);fx[i:i+len(s)]+=s[:len(fx)-i]
 fx=fx[:N]
 v=np.zeros(N,np.float32);v[:min(N,len(vo))]=vo[:N]
-def rms(x):return np.sqrt(np.mean(x[np.abs(x)>1e-4]**2))
+def rms(x):
+    y=x[np.abs(x)>1e-4];return np.sqrt(np.mean(y**2)) if len(y) else 0.1  # silent VO (demo) -> fixed reference level
 fx*= rms(v)/rms(fx)*10**(-12/20)
 m=mus[:N].copy();m*=rms(v)/rms(m)*10**(-21/20)
 x=np.arange(N)/SR;g=np.ones(N);[g.__setitem__((x>a)&(x<b),.45) for a,b in DUCK];g=np.convolve(g,np.ones(SR//2)/(SR//2),'same');m*=g
