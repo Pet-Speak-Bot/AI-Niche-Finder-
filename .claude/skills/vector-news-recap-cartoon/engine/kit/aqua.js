@@ -149,3 +149,59 @@ function aqFlakes(c,t,t0,x,y,n=30,yEnd=AQ_SY){if(t<t0)return;for(let i=0;i<n;i++
 function aqBlurBG(c,o={}){const pal=o.pal||'nature',z=o.zoom||1,cx=o.cx||540,cy=o.cy||900,b=o.blur||7,k=`aqBlur_${pal}_${z}_${cx}_${cy}_${b}`;
  const img=cache(k,()=>{const sharp=mkC(W,H),g=sharp.getContext('2d');g.save();scaleAt(g,cx,cy,z);aqWorld(g,0,{pal,bubbles:false});g.restore();
   return bakeL(W,H,()=>{K.filter=`blur(${b}px)`;K.drawImage(sharp,0,0);K.filter='none';});});c.drawImage(img,0,0);}
+// ---------- mascot: คุณเบต (Betta & Co.) ----------
+// betta mascot facing right, ~560 px wide x 300 tall at s=1, origin = body centre
+// o: {sx dir, expr:'h'|'w'|'smug'|'sad'|'n', pose:'idle'|'point'|'flare'|'wave', talk:true, look:-1..1, body, fin}
+function betta(c,x,y,s,t,o={}){const seed=o.seed||0,pose=o.pose||'idle',e=o.expr||'h';let sx=o.sx===undefined?1:o.sx;if(Math.abs(sx)<.1)sx=sx<0?-.1:.1;
+ const B=o.body||['#14277a','#3f74f0'],F=o.fin||['#2b4fd8','#d8253a'],w=Math.sin(t*3+seed)*10,fl=pose==='flare';
+ c.save();c.translate(x,y+Math.sin(t*1.8+seed)*6);c.scale(s*sx,s);c.rotate(Math.sin(t*1.3+seed)*.03);c.lineJoin='round';c.lineCap='round';
+ const fg=lin(c,-80,0,-290,0,[[0,F[0]],[.55,mix(F[0],F[1],.5)],[1,F[1]]]),fg2=lin(c,0,-40,0,-160,[[0,F[0]],[1,F[1]]]),fg3=lin(c,0,40,0,170,[[0,F[0]],[1,F[1]]]);
+ c.save();scaleAt(c,-70,0,fl?1.08:.84);
+ // tail
+ c.beginPath();c.moveTo(-88,-28);c.bezierCurveTo(-170,-150+w,-300,-125+w,-285,0);c.bezierCurveTo(-300,125-w,-170,150-w,-88,28);c.closePath();c.fillStyle=fg;c.fill();
+ c.strokeStyle='rgba(255,255,255,.22)';c.lineWidth=3;for(let i=-4;i<=4;i++){c.beginPath();c.moveTo(-95,0);c.quadraticCurveTo(-190,i*28+w*.5,-275,i*30*(1+Math.abs(i)*.02)+(i?w*.3:0));c.stroke();}
+ // dorsal + anal
+ c.beginPath();c.moveTo(25,-58);c.quadraticCurveTo(-20,-160+w*.6,-120,-125+w);c.quadraticCurveTo(-95,-75,-72,-40);c.closePath();c.fillStyle=fg2;c.fill();
+ c.beginPath();c.moveTo(35,50);c.quadraticCurveTo(-10,175-w,-130,145-w);c.quadraticCurveTo(-95,85,-62,40);c.closePath();c.fillStyle=fg3;c.fill();
+ c.restore();
+ c.save();c.scale(1.15,1.15);
+ if(fl){for(let i=0;i<9;i++)ell(c,52-i*5,46+Math.sin(i*1.7)*6+i*3,18,12,i%2?'#8e1424':'#b51f33');}
+ // body
+ c.beginPath();c.moveTo(112,8);c.bezierCurveTo(114,-62,20,-72,-40,-42);c.bezierCurveTo(-75,-28,-95,-12,-100,0);c.bezierCurveTo(-95,14,-75,30,-40,44);c.bezierCurveTo(20,70,112,62,112,8);c.closePath();
+ c.fillStyle=lin(c,0,-70,0,62,[[0,B[0]],[.6,B[1]],[1,mix(B[1],'#ffffff',.25)]]);c.fill();
+ c.save();c.clip();c.strokeStyle='rgba(160,200,255,.28)';c.lineWidth=3;for(let i=0;i<5;i++)for(let j=-1;j<=1;j++){c.beginPath();c.arc(-60+i*24,j*24,13,-1.2,1.2);c.stroke();}
+ ell(c,40,-46,48,12,'rgba(255,255,255,.18)');c.restore();
+ c.strokeStyle=fl?'#8e1424':'rgba(10,20,60,.45)';c.lineWidth=fl?7:4;c.beginPath();c.arc(-10,4,48,-.9,.9);c.stroke();
+ // bow tie
+ c.save();c.translate(72,54);c.rotate(-.12);c.fillStyle='#f2c230';c.beginPath();c.moveTo(0,0);c.lineTo(-30,-16);c.lineTo(-30,16);c.closePath();c.fill();c.beginPath();c.moveTo(0,0);c.lineTo(30,-16);c.lineTo(30,16);c.closePath();c.fill();
+ c.fillStyle='#c99716';c.beginPath();c.moveTo(-30,-16);c.lineTo(-22,0);c.lineTo(-30,16);c.fill();c.beginPath();c.moveTo(30,-16);c.lineTo(22,0);c.lineTo(30,16);c.fill();ell(c,0,0,9,10,'#e0a91c');c.restore();
+ // pectoral fin (hand)
+ let pa=2.3+Math.sin(t*6+seed)*.25,pl=1,px=8,py=30;if(pose==='point'){pa=-.22+Math.sin(t*3)*.04;pl=1.55;px=40;py=40;}if(pose==='wave'){pa=-.75+Math.sin(t*10)*.4;pl=1.45;px=40;py=40;}c.save();c.translate(px,py);
+ c.rotate(pa);c.beginPath();c.moveTo(0,-8);c.quadraticCurveTo(40*pl,-26,62*pl,-4);c.quadraticCurveTo(44*pl,18,0,8);c.closePath();c.fillStyle=mix(F[0],'#ffffff',.3);c.fill();c.lineWidth=3;c.strokeStyle=hexA(F[1],.8);c.stroke();c.restore();
+ // eye + brow
+ const ex=62,ey=-16,er=31,lk=(o.look||0)*5;ell(c,ex,ey,er+3,er+3,'rgba(10,20,60,.5)');ell(c,ex,ey,er,er,'#fff');
+ const pr=e==='w'?10:16;ell(c,ex+5+lk,ey+2,pr,pr*1.05,'#15171c');ell(c,ex+10+lk,ey-6,pr*.36,pr*.36,'#fff');ell(c,ex+lk,ey+8,pr*.16,pr*.16,'#fff');
+ if(e==='smug'||((t+seed*1.7)%3.6)<.12){c.save();c.beginPath();c.arc(ex,ey,er+2,0,7);c.clip();c.fillStyle=B[0];c.fillRect(ex-er-4,ey-er-4,er*2+8,e==='smug'?er+2:er*2+8);c.restore();c.strokeStyle='#0d1640';c.lineWidth=4;c.beginPath();c.moveTo(ex-er,ey+(e==='smug'?-2:er*.1));c.lineTo(ex+er,ey+(e==='smug'?-2:er*.1));c.stroke();}
+ c.strokeStyle='#0d1640';c.lineWidth=6;c.beginPath();const by=ey-er-12;
+ if(e==='w'){c.moveTo(ex-20,by-12);c.quadraticCurveTo(ex,by-24,ex+20,by-12);}else if(e==='sad'){c.moveTo(ex-20,by-2);c.lineTo(ex+18,by+8);}else if(e==='smug'){c.moveTo(ex-20,by+6);c.lineTo(ex+18,by-4);}else{c.moveTo(ex-20,by);c.quadraticCurveTo(ex,by-10,ex+20,by);}c.stroke();
+ ell(c,92,20,13,8,'rgba(255,120,150,.55)');
+ // mouth
+ const mx=104,my=24,open=o.talk&&Math.sin(t*15)>-.1;c.strokeStyle='#3a0a14';c.lineWidth=4.5;c.fillStyle='#5a0f1e';c.beginPath();
+ if(e==='w'){c.ellipse(mx-2,my+4,8,11,0,0,7);c.fill();}
+ else if(open){c.ellipse(mx-3,my+2,10,8+Math.abs(Math.sin(t*15))*4,0,0,7);c.fill();ell(c,mx-3,my+7,6,3,'#e2667a');}
+ else if(e==='sad'){c.arc(mx-4,my+12,9,Math.PI+.4,-.4);c.stroke();}
+ else if(e==='smug'){c.moveTo(mx-14,my+2);c.quadraticCurveTo(mx-4,my+8,mx+4,my-4);c.stroke();}
+ else if(e==='n'){c.moveTo(mx-12,my+3);c.lineTo(mx+2,my+3);c.stroke();}
+ else{c.arc(mx-4,my,10,.15,Math.PI-.15);c.stroke();}
+ c.restore();c.restore();}
+// shop badge "Betta & Co."
+function bettaLogo(c,t,t0,x,y,s=1,tag='ปลากัด · ไม้น้ำ · กุ้งแคระ'){const k=pop(t,t0,.5)*s;if(k<=0)return;c.save();c.translate(x,y);c.scale(k,k);
+ rr(c,-330,-120,660,240,60);c.fillStyle='#13205e';c.fill();c.lineWidth=8;c.strokeStyle='#f2c230';c.stroke();rr(c,-312,-102,624,204,48);c.lineWidth=2;c.strokeStyle='rgba(242,194,48,.5)';c.stroke();
+ c.font='104px K';c.textAlign='left';const w1=c.measureText('Betta ').width,w2=c.measureText('& Co.').width,x0=-(w1+w2)/2;
+ c.fillStyle='rgba(0,0,0,.35)';c.fillText('Betta ',x0+3,22);c.fillStyle='#fff';c.fillText('Betta ',x0,18);c.fillStyle='#f2c230';c.fillText('& Co.',x0+w1,18);
+ c.font='34px KS';c.textAlign='center';c.fillStyle='#cfe0ff';c.fillText(tag,0,76);
+ for(let i=0;i<3;i++){c.beginPath();c.arc(260+i*22,-70-i*26,8+i*3,0,7);c.strokeStyle='rgba(255,255,255,.6)';c.lineWidth=3;c.stroke();}c.restore();}
+// speech bubble; txt may use '|' for 2 lines and {y:..}; tail points at (tx,ty)
+function talkBubble(c,t,t0,x,y,txt,tx,ty,t1=1e9){const k=pop(t,t0,.35)*(1-fade(t,t1,.2));if(k<=0)return;const L=txt.split('|');c.save();c.translate(x,y);c.scale(k,k);c.font='46px K';
+ const w=Math.max(...L.map(l=>c.measureText(l.replace(/\{.:|\}/g,'')).width))+70,h=L.length*62+40;c.fillStyle='#fff';c.beginPath();c.moveTo(-26,h/2-4);c.lineTo(tx-x,ty-y);c.lineTo(26,h/2-4);c.fill();
+ rr(c,-w/2,-h/2,w,h,34);c.fill();L.forEach((l,i)=>{const q=seg(l);let tw=0;q.forEach(p=>tw+=c.measureText(p[1]).width);let xx=-tw/2;q.forEach(p=>{c.fillStyle=p[0]==='w'?'#1c2240':p[0]==='y'?'#d8862f':'#D8353B';c.textAlign='left';c.fillText(p[1],xx,-h/2+66+i*62);xx+=c.measureText(p[1]).width;});});c.restore();}

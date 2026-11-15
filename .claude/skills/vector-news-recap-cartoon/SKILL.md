@@ -48,6 +48,10 @@ music bed + pop/ding SFX on reveals + soft swooshes on scene changes. Example: `
 - `shrimp(c,x,y,s,'cherry'|'blue'|'yellow'|'crystal'|'amano'|'black',t,{sx,walk,cute,expr:'h'|'w'|'n',molt,eggs})` (`cute` = mascot face),
   `aqShrimpWalk(c,t,{col,x0,x1,y,s,seed,eggs,molt})`.
 - Props: `aqBottle(c,x,y,s,label,col)`, `aqHeater(c,x,y,s,t)`, `aqTestTube(c,x,y,s,col,t)`, `aqFlakes(c,t,t0,x,y,n)` (overfeeding).
+- Mascot (Betta & Co.): `betta(c,x,y,s,t,{sx,expr:'h'|'w'|'smug'|'sad'|'n',pose:'idle'|'point'|'wave'|'flare',talk})` = คุณเบต (blue/red
+  halfmoon betta, gold bow tie; ~560x300 at s=1). Sidekick = `shrimp(...,'cherry',t,{cute:1})` น้องเชอร์รี่ (asks the questions).
+  `bettaLogo(c,t,t0,x,y,s)` shop badge, `talkBubble(c,t,t0,x,y,'text|{y:line2}',tailX,tailY,tEnd)`. Demo: `episodes/betta-mascot`.
+  Never show two male bettas in one tank (they fight).
 - Content plan for the channel: `content/aquarium-channel/30-day-plan.md` in the repo root. Fish-keeping facts must be checked; give ranges, not exact numbers.
 
 ## Audio defaults
