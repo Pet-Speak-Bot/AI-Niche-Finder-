@@ -38,6 +38,18 @@ music bed + pop/ding SFX on reveals + soft swooshes on scene changes. Example: `
    `node tools/cover.js <name> <sceneIdx> <t> "<yellow line>" "<white line>"`.
 6. Deliver both versions + cover to `~/Desktop/edit-video/<project>/` on the user's computer and open the clip for them (on a phone, send them back in the chat).
 
+## Aquarium kit (ช่องปลาสวยงาม / ไม้น้ำ / กุ้งแคระ)
+`engine/kit/aqua.js` (loaded after sets.js). Demo of every piece: `episodes/aqua-demo` (silent vo.mp3, 33 s).
+- `aqWorld(c,t,{pal:'nature'|'amber',fill:(c,t)=>{...},algae:0..1,cloudy:0..1})` full-frame underwater aquascape (swaying stems,
+  ribbons, driftwood+moss, rocks, anubias, carpet, bubbles, light rays). Substrate top `AQ_SY`=1150. `fill` draws fish/shrimp in world coords.
+- `aqView(c,t,x,y,w,h,cy,o,rad)` the same world inside a rect (mini tanks, before/after). `aqRoom(c,t,o)` living room with a lit tank on a cabinet.
+- `aqBlurBG(c,{pal,zoom,cx,cy,blur})` blurred backdrop, baked once. NEVER use `c.filter='blur()'` per frame: ~40 s/frame in cloud rendering.
+- `fish(c,x,y,s,'neon'|'guppy'|'betta'|'goldfish'|'oto',t,{sx,seed,col})`, `aqSchool(c,t,{kind,n,cx,cy,w,h,A,s,speed,seed})`.
+- `shrimp(c,x,y,s,'cherry'|'blue'|'yellow'|'crystal'|'amano'|'black',t,{sx,walk,cute,expr:'h'|'w'|'n',molt,eggs})` (`cute` = mascot face),
+  `aqShrimpWalk(c,t,{col,x0,x1,y,s,seed,eggs,molt})`.
+- Props: `aqBottle(c,x,y,s,label,col)`, `aqHeater(c,x,y,s,t)`, `aqTestTube(c,x,y,s,col,t)`, `aqFlakes(c,t,t0,x,y,n)` (overfeeding).
+- Content plan for the channel: `content/aquarium-channel/30-day-plan.md` in the repo root. Fish-keeping facts must be checked; give ranges, not exact numbers.
+
 ## Audio defaults
 VO 0 dB, SFX 12 dB under VO (synth pop/ding/check/drop/alert/stamp/chip/tick in audio.py), music bed 21 dB under VO
 (`episodes/<name>/music.mp3` = a song the user has the rights to; with no song a soft synth pad is used, and no song ships with the skill), swoosh1/2 alternate on scene cuts, loudnorm -14 LUFS.

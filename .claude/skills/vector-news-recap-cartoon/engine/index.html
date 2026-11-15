@@ -11,6 +11,6 @@ body{margin:0;background:#000}
 // ?ep=<folder in ../episodes>  (default tham-luang)
 const EP=new URLSearchParams(location.search).get('ep')||'tham-luang';
 const EPD='../episodes/'+EP+'/';
-for(const s of [EPD+'mapdata.js','kit/forest.js','kit/core.js','kit/sets.js',EPD+'episode.js','kit/main.js'])document.write('<script src="'+s+'" onerror="this.remove()"><\/script>');
+for(const s of [EPD+'mapdata.js','kit/forest.js','kit/core.js','kit/sets.js','kit/aqua.js',EPD+'episode.js','kit/main.js'])document.write('<script src="'+s+'" onerror="this.remove()"><\/script>');
 </script>
 </body></html>
